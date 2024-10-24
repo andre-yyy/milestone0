@@ -161,10 +161,10 @@
                     icon: "error",
                 });
             }
-            emailButtonContainer.style.display = 'none'
         })
 
         window.addEventListener('load', async function() {
+            emailButtonContainer.style.display = 'none'
             const user = loadUser()
             if(!user) return
             

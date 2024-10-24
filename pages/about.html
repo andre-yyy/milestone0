@@ -100,10 +100,10 @@
         const emailBtn = document.getElementById('email-btn')
         
         window.addEventListener('load', async function() {
+            emailButtonContainer.style.display = 'none'
             renderFooter()
             const user = loadUser()
             if(!user) return
-            emailButtonContainer.style.display = 'none'
             
             if(user) currentUser = user
             const fetchResult = await fetchUserData(currentUser.uid)

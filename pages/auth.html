@@ -109,9 +109,9 @@
         let currentUser = {}
 
         window.addEventListener('load', function() {
+            emailButtonContainer.style.display = 'none'
             const user = loadUser()
             if(!user) return
-            emailButtonContainer.style.display = 'none'
             if(user) currentUser = user
             inputEmail.value = currentUser.email
         })
