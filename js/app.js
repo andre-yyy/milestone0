@@ -27,9 +27,6 @@ async function fetchUserData(userId) {
             }),
             credentials: 'include'
         })
-        if (!response.ok) {
-            throw new Error(`HTTP error with status: ${response.status}`);
-        }
         const data = await response.json()
         return data
     } catch (error) {
@@ -50,9 +47,6 @@ async function handleLogin(inputEmail, inputPassword) {
             }),
             credentials: 'include'
         })
-        if (!response.ok) {
-            throw new Error(`HTTP error with status: ${response.status}`);
-        }
         const data = await response.json()
         return data
     } catch(error) {
@@ -73,9 +67,6 @@ async function handleRegister(inputEmail, inputPassword) {
             }),
             credentials: 'include'
         })
-        if (!response.ok) {
-            throw new Error(`HTTP error with status: ${response.status}`);
-        }
         const data = await response.json()
         return data
     } catch(error) {
