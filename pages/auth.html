@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/bootstrap.min.css">
+    <title>Auth</title>
+</head>
+
+<body>
+
+    <nav class="navbar navbar-expand-lg bg-body-tertiary shadow" id="">
+        <div class="container-fluid">
+            <a href="../index.html" class="navbar-brand">Hacktop Rental</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" type="button" href="../index.html" id="nav-home">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" type="button" href="./about.html" id="nav-about">About</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" type="button" href="./products.html" id="nav-products">Products</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" type="button" href="./contact-us.html" id="nav-products">Contact Us</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" type="button" href="./auth.html" id="nav-login">Login</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" type="button" id="logout-btn"></a>
+                    </li>
+                </ul>
+
+                <div class="dropdown text-center mx-4" id="email-btn-container">
+                    <button class="btn btn-outline-dark fw-bold dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                        id="email-btn"></button>
+                    <ul class="dropdown-menu dropdown-menu-md-start">
+                        <li> <button type="button" class="dropdown-item">Transaksi</button></li>
+                    </ul>
+                </div>
+
+
+            </div>
+        </div>
+    </nav>
+
+    <br><br><br>
+
+    <div class="container rounded shadow p-3" style="max-width: 33em;">
+        <div class="row d-flex rounded rounded-4 shadow p-1 justify-content-evenly mx-auto my-2"
+            id="auth-actions" style="width: 85%; background-color: rgba(230, 230, 230, 1);">
+            <button type="button" class="col-5 btn rounded-5" id="login-btn">Login</button>
+            <button type="button" class="col-5 btn rounded-5 " id="register-btn">Register</button>
+        </div>
+        <form action="" id="auth-form">
+            <div class="row my-4">
+                <div class="col">
+                    <label for="" class="form-label fs-2">Email</label>
+                    <input type="email" class="form-control" placeholder="Enter email.." id="input-email"  required>
+                </div>
+            </div>
+            <div class="row my-4">
+                <div class="col">
+                    <label for="" class="form-label fs-2">Password</label>
+                    <input type="password" class="form-control" placeholder="Enter password.." id="input-password" required>
+                </div>
+            </div>
+            <div class="row" id="confirm-password">
+                <div class="col">
+                    <label for="" class="form-label fs-2">Confirm Password</label>
+                    <input type="password" class="form-control" placeholder="Enter confirm password.."  required>
+                </div>
+            </div>
+            <div class="alert alert-danger my-3 text-center" role="alert" id="auth-error-message">
+
+            </div>
+
+            <div class="text-center my-4">
+                <button type="button" class="btn btn-success" id="auth-button">Submit</button>
+            </div>
+        </form>
+
+    </div>
+
+    <footer class="py-3 bg-black mt-3 fixed-bottom">
+        <div class="container px-5"><p class="m-0 text-center text-white small">Copyright &copy; Hacktop Rental 2024</p></div>
+    </footer>
+
+    <script src="../js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="../js/app.js"></script>
+    <script>
+        const emailButtonContainer = document.getElementById('email-btn-container')
+        const inputEmail = document.getElementById('input-email')
+
+        let currentUser = {}
+
+        window.addEventListener('load', function() {
+            const user = loadUser()
+            if(!user) return
+            emailButtonContainer.style.display = 'none'
+            if(user) currentUser = user
+            inputEmail.value = currentUser.email
+        })
+
+
+        let isLoginSelected = true
+        const loginBtn = document.getElementById('login-btn')
+        const registerBtn = document.getElementById('register-btn')
+        const confirmPassword = document.getElementById('confirm-password')
+        const authErrorMessage = document.getElementById('auth-error-message')
+        const authActions = document.getElementById('auth-actions')
+        const authButton = document.getElementById('auth-button')
+        const authForm = document.getElementById('auth-form')
+        authErrorMessage.style.display = "none"
+
+        loginBtn.addEventListener('click', function () {
+            isLoginSelected = true
+            authErrorMessage.style.display = 'none'
+            confirmPassword.style.display = 'none'
+            authButton.textContent = "Login"
+            loginBtn.classList.add('bg-dark', 'text-light', 'fw-bold')
+            registerBtn.classList.remove('bg-dark', 'text-light', 'fw-bold')
+        })
+
+        registerBtn.addEventListener('click', function () {
+            isLoginSelected = false
+            confirmPassword.style.display = 'block'
+            authButton.textContent = "Register"
+            loginBtn.classList.remove('bg-dark', 'text-light', 'fw-bold')
+            registerBtn.classList.add('bg-dark', 'text-light', 'fw-bold')
+        })
+
+        if (isLoginSelected) {
+            loginBtn.classList.add('bg-dark', 'text-light', 'fw-bold')
+
+            registerBtn.classList.remove('bg-dark', 'text-light', 'fw-bold')
+            confirmPassword.style.display = 'none'
+        } else {
+            loginBtn.classList.remove('bg-dark', 'text-light', 'fw-bold')
+            
+            registerBtn.classList.add('bg-dark', 'text-light', 'fw-bold')
+            confirmPassword.style.display = 'block'
+        }
+
+        authButton.addEventListener('click', handleActions)
+
+        async function handleActions() {
+            const userEmail = document.getElementById('input-email').value
+            const userPassword = document.getElementById('input-password').value
+            const confirmPassword = authForm[2].value
+            if (isLoginSelected) {
+                const loginResult = await handleLogin(userEmail, userPassword)
+                if (loginResult.email) { 
+                    Swal.fire({
+                        title: "Login Berhasil!",
+                        icon: "success",
+                        timer: 2000,
+                        timerProgressBar: true,
+                    })
+                    const user = {
+                        uid: loginResult.uid,
+                        email: loginResult.email
+                    }
+                    localStorage.setItem('milestone0_user', JSON.stringify(user))
+                    setTimeout(() => {
+                        window.location.href = 'products.html'
+                    }, 2000)
+                } else if(loginResult.message == 'Wrong password.') {
+                    Swal.fire({
+                        title: "Password salah!",
+                        icon: "error",
+                    })
+                } else if(loginResult.message == 'User not found.') {
+                    Swal.fire({
+                        title: "User tidak ditemukan!",
+                        icon: "error",
+                    })
+                }
+            } else {
+                let errorMessage = ""
+                if(confirmPassword !== userPassword) {
+                    authErrorMessage.style.display = 'block'
+                    errorMessage = "Konfirmasi password berbeda"
+                    authErrorMessage.textContent = errorMessage
+                    return
+                }
+                if(!userEmail || !userPassword || !confirmPassword) {
+                    errorMessage = "Mohon isi semua input"
+                    authErrorMessage.textContent = errorMessage
+                    authErrorMessage.style.display = 'block'
+                    return
+                }
+                const registerResult = await handleRegister(userEmail, userPassword)                
+                if(registerResult.message == 'Email already registered.') {
+                    Swal.fire({
+                        title: "Email sudah digunakan!",
+                        text: "Mohon gunakan email lain.",
+                        icon: "error",
+                    })
+                } else if(registerResult.email == userEmail) {
+                    Swal.fire({
+                        title: "Registrasi Berhasil!",
+                        icon: "success",
+                        timer: 2000,
+                        timerProgressBar: true,
+                    })
+                }
+            }
+        }
+    </script>
+</body>
+
+</html>

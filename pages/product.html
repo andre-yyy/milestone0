@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/bootstrap.min.css">
+    <title>Product</title>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg bg-body-tertiary shadow" id="">
+        <div class="container-fluid">
+            <a href="../index.html" class="navbar-brand">Hacktop Rental</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" type="button" href="../index.html" id="nav-home">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" type="button" href="./about.html" id="nav-about">About</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" type="button" href="./products.html" id="nav-products">Products</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" type="button" href="./contact-us.html" id="nav-products">Contact Us</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" type="button" href="./auth.html" id="nav-login">Login</a>
+                    </li>
+
+                </ul>
+
+                <div class="dropdown text-center mx-4" id="email-btn-container">
+                    <button class="btn btn-outline-dark fw-bold dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                        id="email-btn"></button>
+                    <ul class="dropdown-menu dropdown-menu-md-start">
+                        <li> <a href="cart.html" type="button" id="update-email-btn" class="dropdown-item">Transaksi</a>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <br>
+    <div id="product"><div class="row p-4" id="product-container"></div></div>
+    <br><br>
+    <footer class="py-3 bg-black mt-3 fixed-bottom">
+        <div class="container px-5"><p class="m-0 text-center text-white small">Copyright &copy; Hacktop Rental 2024</p></div>
+    </footer>
+
+    <script src="../js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="../js/app.js"></script>
+    <script>
+
+        let productId = ""
+
+        const products = [
+            { id: "PLZ4L09O", brand: 'asus', name: 'Vivo Book Go', price: 10, picture: '../assets/images/ASUS_Vivobook_Go.jpg' , daily: 0.5},
+            { id: "TNYTH19Z", brand: 'asus', name: 'TUF Gaming', price: 15, picture: '../assets/images/ASUS_TUF_GAMING_F15.jpg' , daily: 0.8},
+            { id: "KHNFZKKM", brand: 'asus', name: 'Zenbook 14', price: 12, picture: '../assets/images/ASUS_Zenbook_14.jpg' , daily: 0.6},
+            { id: "WNLMVCK5", brand: 'acer', name: 'Aspire Lite', price: 10, picture: '../assets/images/ACER_Aspire_Lite.jpg' , daily: 0.5},
+            { id: "1T4Y3ELN", brand: 'acer', name: 'Nitro V', price: 10, picture: '../assets/images/ACER_NITRO_V.jpg', daily: 0.7},
+            { id: "Y97XR1IQ", brand: 'advan', name: 'Notebook Workpro', price: 8, picture: '../assets/images/ADVAN_Notebook_Workpro.jpg' , daily: 0.5},
+            { id: "3V00DB8T", brand: 'axio', name: 'MyBook Hype 5', price: 6, picture: '../assets/images/Axioo_MyBook_HYPE_5.jpg' , daily: 0.4},
+            { id: "2U5VD0ZU", brand: 'huawei', name: 'Matebook D14', price: 8, picture: '../assets/images/HUAWEI_MateBook_D_14.jpg' , daily: 0.5},
+            { id: "FSKTENHW", brand: 'infinix', name: 'Inbook X2', price: 10, picture: '../assets/images/infinix_Inbook_X2.jpg' , daily: 0.4},
+            { id: "BDBTKRD0", brand: 'lenovo', name: 'IdeaPad', price: 10, picture: '../assets/images/Lenovo_IdeaPad.jpg' , daily: 0.6},
+            { id: "AL4QEKDH", brand: 'lenovo', name: 'LOQ 15', price: 15, picture: '../assets/images/LENOVO_LOQ_15.jpg' , daily: 0.7},
+            { id: "2HQVPHJA", brand: 'lenovo', name: 'Yoga Pro 7i', price: 13, picture: '../assets/images/Lenovo_Yoga_Pro_7i.jpg' , daily: 0.7},
+            { id: "5HL63DTR", brand: 'mac', name: 'Macbook Pro M1', price: 15, picture: '../assets/images/Macbook_Pro_M1_Pro.jpg' , daily: 1},
+            { id: "OC012Q9H", brand: 'msi', name: 'Modern 14', price: 9, picture: '../assets/images/MSI_Modern_14.jpg' , daily: 0.6},
+        ]
+        let currentUser = {}
+        let product = {}
+        let rentDays = 1
+        let finalPrice = 0
+
+        const content = document.getElementById('content')
+        const allProducts = document.getElementById('all-products')
+        const navLogin = document.getElementById('nav-login')
+        const emailButtonContainer = document.getElementById('email-btn-container')
+        const productContainer = document.getElementById('product-container')
+        const emailBtn = document.getElementById('email-btn')
+
+        window.addEventListener('load', async function () {
+            const user = loadUser()
+            if (!user) return
+            if (user) currentUser = user
+            const fetchResult = await fetchUserData(currentUser.uid)
+            if(fetchResult.message == "Not authorized.") {
+                window.location.href = "/index.html?m=forbidden"
+                
+            }
+            
+            if (fetchResult.uid == currentUser.uid) {
+                navLogin.style.display = 'none'
+                emailButtonContainer.style.display = 'block'
+                emailBtn.textContent = currentUser.email
+            }
+        })
+
+        window.addEventListener('load', function () {
+            const urlParams = new URLSearchParams(window.location.search);
+            const pId = urlParams.get('id')
+            if (!pId) {
+                window.location.href = "products.html"
+                return
+            }
+            productId = pId
+            const searchProduct = products.find(product => product.id === productId)
+            product = searchProduct
+            document.title += ` : ${pId}`
+            emailButtonContainer.style.display = 'none'
+            
+            const itemContainer = document.createElement('div')
+            itemContainer.classList.add('col',)
+            itemContainer.innerHTML = `
+                <div class="card my-3 p-0" @click="">
+                    <div class="text-nowrap card-header text-center overflow-auto p-2">
+                        <div class="">
+                            <span class="fw-bold fs-5" >${product.brand[0].toUpperCase()}${product.brand.substring(1)} ${product.name}</span>
+                        </div>
+                    </div>
+                    <div class="card-body text-start">
+                        <div class="text-center my-1"><img class="" src="${product.picture}" alt="${product.picture}" style="width: 15em; height: 17em; object-fit: cover;"></div>
+
+                        <div class="text-center my-2">
+                            <p><span class="fw-bold fs-6">Daily fees</span> : <span>${product.daily}</span></p>
+                        </div>
+                        <div class="text-center">
+                            <div class="col-6 col-md-4 col-lg-2 mx-auto">
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text" id="basic-addon1">Hari</span>
+                                    <input type="number" class="form-control text-center" min=1 max=120 required onchange="handleRentDays(event)" id="rent-days">
+                                </div>
+                            </div>
+
+                        </div>
+                        
+                    </div>
+                    <div class="card-footer text-body-secondary d-flex justify-content-between ">
+                        <div class="btn btn-dark fw-semibold">
+                            Base price : <span>${product.price}</span>
+                        </div>
+                        <div class="btn btn-outline-dark border border-2 fw-semibold" onclick="handlePayment()" id="payment-btn">
+                            Total : <span id="total-amount">0</span>
+                        </div>
+                    </div>
+                </div>
+            `
+            productContainer.appendChild(itemContainer)
+        })
+        
+        function handleRentDays(e) {
+            const totalAmount = document.getElementById('total-amount')
+            const paymentBtn = document.getElementById('payment-btn')
+            rentDays = e.target.value
+            const calculatedAmount = product.price + (product.daily * rentDays)
+            paymentBtn.textContent = `Total : ${calculatedAmount.toFixed(1)}`
+            finalPrice = calculatedAmount.toFixed(1)
+            paymentBtn.addEventListener('mouseenter', function() {
+                paymentBtn.textContent = "Checkout"
+            })
+            paymentBtn.addEventListener('mouseleave', function() {
+                paymentBtn.textContent = `Total : ${calculatedAmount.toFixed(1)}`
+            })
+        }
+
+        async function handlePayment() {
+            if(finalPrice < 1) return
+            const baseUrl = "https://milestone0-api.ftgohacktiv8.my.id"
+            const generatedOrderId = `HACKTOP-${genRandomString(8)}`
+            try {
+                const response = await fetch(baseUrl + '/payment/pay', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        transaction_details: {
+                            order_id: generatedOrderId,
+                            gross_amount: finalPrice * 1000
+                        },
+                        customer_details: {
+                            email: currentUser.email,
+                        },
+                    }),
+                    credentials: "include"
+                })
+                if(!response.ok) {
+                    throw new Error(`HTTP error with status: ${response.status}`);
+                }
+                const data = await response.json()
+                window.open(data.redirect_url, '_blank')
+            } catch(error) {
+                console.error('Error fetching data:', error);
+            }
+
+            try {
+                const response = await fetch(baseUrl + '/payment/create', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        order_id: generatedOrderId,
+                        gross_amount: finalPrice * 1000,
+                        email: currentUser.email,
+                        item: `${product.brand} ${product.name}`,
+                        days: rentDays
+                    }),
+                    credentials: 'include'
+                })
+                if(!response.ok) throw new Error(`HTTP error with status: ${response.status}`);
+            } catch(error) {
+                console.error('Error fetching data:', error);
+            }
+        }
+    </script>
+</body>
+</html>
