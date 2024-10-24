@@ -10,7 +10,7 @@ function loadUser() {
 }
 
 async function renderFooter() {
-    const response = await fetch('../components/footer.html')
+    const response = await fetch('https://andre-yyy.github.io/milestone0/components/footer.html')
     const data = await response.text()
     footer.innerHTML = data
 }
