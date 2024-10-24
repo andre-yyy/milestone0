@@ -177,6 +177,9 @@
         }
 
         async function handlePayment() {
+            if(!currentUser.email) {
+                window.location.href = "https://andre-yyy.github.io/milestone0/index.html?m=forbidden"
+            }
             if(finalPrice < 1) return
             const baseUrl = "https://milestone0-api.ftgohacktiv8.my.id"
             const generatedOrderId = `HACKTOP-${genRandomString(8)}`
