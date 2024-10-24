@@ -98,7 +98,7 @@
             if (user) currentUser = user
             const fetchResult = await fetchUserData(currentUser.uid)
             if(fetchResult.message == "Not authorized.") {
-                window.location.href = "/index.html?m=forbidden"
+                window.location.href = "https://andre-yyy.github.io/milestone0/index.html?m=forbidden"
                 
             }
             
@@ -113,7 +113,7 @@
             const urlParams = new URLSearchParams(window.location.search);
             const pId = urlParams.get('id')
             if (!pId) {
-                window.location.href = "products.html"
+                window.location.href = "https://andre-yyy.github.io/milestone0/pages/products.html"
                 return
             }
             productId = pId
