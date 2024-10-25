@@ -1,7 +1,5 @@
 const baseUrl = "https://milestone0-api.ftgohacktiv8.my.id"
-
 const footer = document.getElementById('footer')
-const app = document.getElementById('app')
 
 function loadUser() {
     const isUser = localStorage.getItem('milestone0_user')
